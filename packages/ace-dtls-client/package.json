@@ -1,0 +1,17 @@
+{
+  "name": "final-project",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/assert": "0.0.31",
+    "cbor": "^3.0.3",
+    "node-coap-client": "^0.5.2",
+    "prompt-sync": "^4.1.5"
+  }
+}
