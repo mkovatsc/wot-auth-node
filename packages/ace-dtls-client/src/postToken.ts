@@ -22,9 +22,6 @@ export function dtlsClient (payload,ipAddress,url):any{
           }else{
             reject('Error: '+ response.payload.toString() + code);
           }
-        }).then((message)=>{
-
-
         })
         .catch(err => { reject('Error')/* handle error */ })
         ;
