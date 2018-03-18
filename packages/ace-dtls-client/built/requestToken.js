@@ -15,9 +15,6 @@ function dtlsClient(payload, ipAddress, url, preSharedKey) {
     return new Promise(function (resolve, reject) {
         clientid = "clientA";
         coap.CoapClient.setSecurityParams(ipAddress, { psk: (_a = {}, _a[clientid] = preSharedKey, _a) });
-        // coap.setSecurityParams(ipAddress, {psk:{"Client1":"azertyuiopmlkjhgfdsqwxcvbnazerty"}});
-        // coap.setSecurityParams(ipAddress, {psk:{"clientA":"hor/tWePQukDIaLGsc1X/g=="}});
-        // coap.setSecurityParams(ipAddress, {psk:{"clientA":"AAAAAAAAAAAAAAAAAAAAAAAA"}});
         coap.CoapClient
             .request(url, 'post', payload)
             .then(function (response) {
@@ -32,10 +29,8 @@ function dtlsClient(payload, ipAddress, url, preSharedKey) {
             else {
                 token = message.get(constant.ACCESS_TOKEN);
                 kid = message.get(constant.CNF).get(1).get(2).toString('base64');
-                // console.log(kid);
-                // console.log(message.get(constant.CNF).get(1).get(-1).toString('base64'));
                 popKey = message.get(constant.CNF).get(1).get(-1).toString('ascii');
-                console.log(popKey);
+                // console.log(popKey);
                 return cborMap.cborMapping(token);
             }
         }).then(function (message) {

@@ -16,7 +16,6 @@ function dtlsClient(payload, ipAddress, url) {
             else {
                 reject('Error: ' + response.payload.toString() + code);
             }
-        }).then(function (message) {
         })
             .catch(function (err) { reject('Error'); /* handle error */ });
     });
