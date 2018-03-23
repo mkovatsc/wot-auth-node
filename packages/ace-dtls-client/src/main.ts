@@ -31,6 +31,7 @@ initReq.unauthRequest('coap://192.168.1.25:5687/temp').then((message)=>{
 }).then((keyObj)=>{
       popKey = keyObj.key;
       kid = keyObj.kid;
+      token = keyObj.token
       return postToken.dtlsClient(keyObj.token,'192.168.1.25','coap://192.168.1.25:5687/authz-info');
 }).then((message)=>{
       return resourceChannel.actionRequest(kid,'192.168.1.25','coaps://192.168.1.25:5688/temp',popKey);

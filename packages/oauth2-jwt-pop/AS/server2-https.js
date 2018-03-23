@@ -1,19 +1,23 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var oauthserver = require('oauth2-server');
-var memorystore = require('./model.js');
-
+var memorystore = require('./pop-model.js');
+const x509 = require('x509');
 var http = require('http');
 var https = require('https');
 var fs = require('fs');
 
-//The Key and the Certificate used to start an HTTPS server
 var hskey = fs.readFileSync('./../certificate/key.pem');
-var hscert = fs.readFileSync('./../certificate/cert.pem')
+var hscert = fs.readFileSync('./../certificate/cert.pem');
+var cacert = fs.readFileSync('./../certificate/cert.pem');
+
 
 var options = {
     key: hskey,
-    cert: hscert
+    cert: hscert,
+    requestCert: true,
+    rejectUnauthorized: false,
+    ca: cacert
 };
 
 
@@ -31,10 +35,27 @@ app.oauth = oauthserver({
 });
 
 console.log('Server Starting');
+
+app.use(function (req, res, next) {
+  const cert = req.connection.getPeerCertificate();
+  if (req.client.authorized) {
+  	  next()
+  } else if (cert.subject) {
+		res.status(403)
+		   .send(`Sorry ${cert.subject.CN}, certificates from ${cert.issuer.CN} are not welcome here.`)
+  } else {
+
+		res.status(401)
+		   .send(`Sorry, but you need to provide a client certificate to continue.`)
+  }
+
+
+});
+
 app.all('/oauth/token', app.oauth.grant());
 
 app.get('/', app.oauth.authorise(), function (req, res) {
-  res.send('Secret area');
+  // res.send('Secret area');
 });
 
 app.use(app.oauth.errorHandler());

@@ -24,13 +24,13 @@ var kid;
 var asUri;
 initReq.unauthRequest('coap://192.168.1.25:5687/temp').then(function (message) {
     asUri = message;
-    console.log(asUri);
     return cborMap.cborMapping(params);
 }).then(function (cborObject) {
     return requestToken.dtlsClient(cborObject, '192.168.1.25', 'coaps://192.168.1.25:5684/token', "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 }).then(function (keyObj) {
     popKey = keyObj.key;
     kid = keyObj.kid;
+    token = keyObj.token;
     return postToken.dtlsClient(keyObj.token, '192.168.1.25', 'coap://192.168.1.25:5687/authz-info');
 }).then(function (message) {
     return resourceChannel.actionRequest(kid, '192.168.1.25', 'coaps://192.168.1.25:5688/temp', popKey);
